@@ -242,6 +242,10 @@ void AimPlayer::UpdateAnimations(LagRecord* record) {
 				// get the duckamt change per tick.
 				float change = (duck / time) * g_csgo.m_globals->m_interval;
 
+				// fix legs staying up in air.
+				if (record->m_flags & FL_ONGROUND)
+					record->m_layers[4].m_cycle = 0;
+
 				// fix crouching players.
 				m_player->m_flDuckAmount() = previous->m_duck + change;
 
@@ -290,9 +294,6 @@ void AimPlayer::UpdateAnimations(LagRecord* record) {
 	// fixes for networked players.
 	g_csgo.m_globals->m_frametime = g_csgo.m_globals->m_interval;
 	g_csgo.m_globals->m_curtime = m_player->m_flSimulationTime();
-
-	// fix feet spin.
-	*(float*)(m_player->m_PlayerAnimState() + 0x9C) = 0.f;
 
 	// fix animating in same frame.
 	if (state->m_frame == g_csgo.m_globals->m_frame)

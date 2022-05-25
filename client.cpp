@@ -583,6 +583,10 @@ void Client::StartMove(CUserCmd* cmd) {
 	else {
 		m_local->m_fFlags() &= ~FL_ONGROUND;
 	}
+
+	// fix legs staying up in air.
+	if (m_local->m_fFlags() & FL_ONGROUND)
+		m_layers[4].m_cycle = 0;
 }
 
 void Client::BackupPlayers(bool restore) {

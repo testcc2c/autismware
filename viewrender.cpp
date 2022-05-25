@@ -1,6 +1,7 @@
 #include "includes.h"
 
 void Hooks::OnRenderStart( ) {
+
 	// call og.
 	g_hooks.m_view_render.GetOldMethod< OnRenderStart_t >( CViewRender::ONRENDERSTART )( this );
 
@@ -10,10 +11,10 @@ void Hooks::OnRenderStart( ) {
 	}
 
 	else if (g_menu.main.visuals.fov.get() && !g_input.GetKeyState(g_menu.main.memes.Optifine.get())) {
-		if( g_cl.m_local && g_cl.m_local->m_bIsScoped( ) ) {
-			if( g_menu.main.visuals.fov_scoped.get( ) ) {
-				if( g_cl.m_local->GetActiveWeapon( )->m_zoomLevel( ) != 2 ) {
-					g_csgo.m_view_render->m_view.m_fov = g_menu.main.visuals.fov_amt.get( );
+		if(g_cl.m_local && g_cl.m_local->m_bIsScoped() && g_cl.m_processing) {
+			if( g_menu.main.visuals.fov_scoped.get()) {
+				if( g_cl.m_local->GetActiveWeapon()->m_zoomLevel() != 2 ) {
+					g_csgo.m_view_render->m_view.m_fov = g_menu.main.visuals.fov_amt.get();
 				}
 				else {
 					g_csgo.m_view_render->m_view.m_fov += 45.f;

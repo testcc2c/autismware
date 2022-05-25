@@ -1,10 +1,7 @@
 #include "includes.h"
 #include <vector>
 
-
-
 Movement g_movement{ };;
-
 
 void Movement::JumpRelated() {
 	if (g_cl.m_local->m_MoveType() == MOVETYPE_NOCLIP)
@@ -20,11 +17,6 @@ void Movement::JumpRelated() {
 			g_cl.m_cmd->m_buttons |= IN_DUCK;
 	}
 }
-
-
-
-
-
 
 void Movement::Strafe() {
 	vec3_t velocity;
@@ -225,15 +217,6 @@ void Movement::Strafe() {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
 
 void Movement::DoPrespeed() {
 	float   mod, min, max, step, strafe, time, angle;
@@ -554,6 +537,7 @@ void Movement::cripwalk() {
 		}
 	}
 }
+
 void Movement::QuickStop()
 {
 	if (!g_menu.main.movement.autostop_always_on.get())
@@ -676,8 +660,8 @@ void Movement::FakeWalk() {
 	vec3_t velocity{ g_cl.m_local->m_vecVelocity() };
 	int    ticks{ };
 
-	if (g_cl.m_weapon_id == REVOLVER)
-		fwspeed = 6;
+	if (!g_cl.m_processing) // crash fix maybe?
+		return;
 
 	if (!g_input.GetKeyState(g_menu.main.movement.fakewalk.get()))
 		return;
@@ -685,6 +669,8 @@ void Movement::FakeWalk() {
 	if (!g_cl.m_local->GetGroundEntity())
 		return;
 
+	if (g_cl.m_weapon_id == REVOLVER)
+		fwspeed = 6;
 	// reference:
 	// https://github.com/ValveSoftware/source-sdk-2013/blob/master/mp/src/game/shared/gamemovement.cpp#L1612
 

@@ -1909,19 +1909,17 @@ void Visuals::DrawPlantedC4() {
 	//     https://github.com/VSES/SourceEngine2007/blob/43a5c90a5ada1e69ca044595383be67f40b33c61/se2007/game/shared/cstrike/weapon_c4.cpp#L271
 	//     https://github.com/VSES/SourceEngine2007/blob/43a5c90a5ada1e69ca044595383be67f40b33c61/se2007/game/shared/cstrike/weapon_c4.cpp#L437
 	//     https://github.com/ValveSoftware/source-sdk-2013/blob/master/sp/src/game/shared/sdk/sdk_gamerules.cpp#L173
-	{
-		// get our distance to the bomb.
-		// todo - dex; is dst right? might need to reverse CBasePlayer::BodyTarget...
-		dst = g_cl.m_local->WorldSpaceCenter();
-		to_target = m_planted_c4_explosion_origin - dst;
-		dist = to_target.length();
+	// get our distance to the bomb.
+	// todo - dex; is dst right? might need to reverse CBasePlayer::BodyTarget...
+	dst = g_cl.m_local->WorldSpaceCenter();
+	to_target = m_planted_c4_explosion_origin - dst;
+	dist = to_target.length();
 
-		// calculate the bomb damage based on our distance to the C4's explosion.
-		range_damage = m_planted_c4_damage * std::exp((dist * dist) / ((m_planted_c4_radius_scaled * -2.f) * m_planted_c4_radius_scaled));
+	// calculate the bomb damage based on our distance to the C4's explosion.
+	range_damage = m_planted_c4_damage * std::exp((dist * dist) / ((m_planted_c4_radius_scaled * -2.f) * m_planted_c4_radius_scaled));
 
-		// now finally, scale the damage based on our armor (if we have any).
-		final_damage = scale_damage(range_damage, g_cl.m_local->m_ArmorValue());
-	}
+	// now finally, scale the damage based on our armor (if we have any).
+	final_damage = scale_damage(range_damage, g_cl.m_local->m_ArmorValue());
 
 	// m_flC4Blow is set to gpGlobals->curtime + m_flTimerLength inside CPlantedC4.
 	explode_time_diff = m_planted_c4_explode_time - g_csgo.m_globals->m_curtime;
@@ -1953,12 +1951,12 @@ void Visuals::DrawPlantedC4() {
 				render::indicator.string(5, 10, colortimer, timer1337);
 			}
 		
-			if (g_cl.m_local->m_iHealth() <= final_damage) {
+			if (g_cl.m_local->m_iHealth() <= final_damage && g_cl.m_processing) {
 				render::indicator.string(6, 31, { 0,0, 0, 125 }, tfm::format(XOR("FATAL")));
 				render::indicator.string(5, 30, { 192, 32, 17, 255 }, tfm::format(XOR("FATAL")));
 				//Render.StringCustom(5, 0, 0, getSite(c4) + timer + "s", colortimer, font);
 			}
-			else if (final_damage > 1) {
+			else if (final_damage > 1 && g_cl.m_processing) {
 				render::indicator.string(5, 31, { 0,0, 0, 125 }, tfm::format(XOR("- %iHP"), damage1337));
 				render::indicator.string(6, 30, { 255, 255, 152, 255 }, tfm::format(XOR("- %iHP"), damage1337));
 			}

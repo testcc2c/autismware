@@ -23,8 +23,8 @@ LagRecord* Resolver::FindIdealRecord(AimPlayer* data)
 		if (!first_valid)
 			first_valid = current;
 
-		// try to find a record with a lby update, walking or no anti-aim.
-		if (it->m_mode == Modes::RESOLVE_LAST_LBY || it->m_mode == Modes::RESOLVE_WALK || it->m_mode == Modes::RESOLVE_NONE)
+		// try to find a record with onshot, lby update, walking or no anti-aim.
+		if (it->m_shot || it->m_mode == Modes::RESOLVE_LAST_LBY || it->m_mode == Modes::RESOLVE_WALK || it->m_mode == Modes::RESOLVE_NONE)
 			return current;
 	}
 
@@ -110,17 +110,28 @@ void Resolver::SetMode(LagRecord* record)
 		record->m_mode = Modes::RESOLVE_AIR;
 }
 
-void Resolver::MatchShot(AimPlayer* data, LagRecord* record)
+void Resolver::MatchShot( AimPlayer* data, LagRecord* record )
 {
 	float shoot_time = -1.f;
-	LagRecord* previous = m_records[1].get();
-	Weapon* weapon = data->m_player->GetActiveWeapon();
-	if (weapon) {
-		// with logging this time was always one tick behind.
-		// so add one tick to the last shoot time.
-		shoot_time = weapon->m_fLastShotTime() + g_csgo.m_globals->m_interval;
+
+	Weapon* weapon = data->m_player->GetActiveWeapon( );
+	if( weapon ) {
+		shoot_time = weapon->m_fLastShotTime( ) - g_csgo.m_globals->m_interval;
 	}
-	record->m_bDidShot = shoot_time > previous->m_sim_time && shoot_time <= record->m_sim_time;
+
+	// this record has a shot on it.
+	if( game::TIME_TO_TICKS( shoot_time ) == game::TIME_TO_TICKS( record->m_sim_time ) ) {
+		if( record->m_lag <= 2 )
+			record->m_shot = true;
+		
+		// more then 1 choke, cant hit pitch, apply prev pitch.
+		else if( data->m_records.size( ) >= 2 ) {
+			LagRecord* previous = data->m_records[ 1 ].get( );
+
+			if( previous && !previous->dormant( ) )
+				record->m_eye_angles.x = previous->m_eye_angles.x;
+		}
+	}
 }
 
 int last_ticks[65];

@@ -110,7 +110,7 @@ void Resolver::SetMode(LagRecord* record)
 		record->m_mode = Modes::RESOLVE_AIR;
 }
 
-void Resolver::MatchShot( AimPlayer* data, LagRecord* record )
+void Resolver::MatchShot(AimPlayer* data, LagRecord* record)
 {
 	float shoot_time = -1.f;
 

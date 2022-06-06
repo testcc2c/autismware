@@ -615,14 +615,12 @@ void Client::BackupPlayers(bool restore) {
 	}
 }
 
-bool dropped_awp = false;
 
 void Client::DoMove() {
 	penetration::PenetrationOutput_t tmp_pen_data{ };
 	// backup strafe angles (we need them for input prediction)
 	m_strafe_angles = m_cmd->m_view_angles;
 
-	dropped_awp = false;
 
 	static int				ticks = 0;
 	static bool				side_switch = false;
@@ -652,12 +650,6 @@ void Client::DoMove() {
 
 	// convert viewangles to directional forward vector.
 	math::AngleVectors(m_view_angles, &m_forward_dir);
-
-	// funny awp shit lmfao
-	if (m_weapon_id == AWP && !dropped_awp) {
-		g_csgo.m_engine->ExecuteClientCmd("drop");
-		dropped_awp = true;
-	}
 
 	// store stuff after input pred.
 	m_shoot_pos = m_local->GetShootPosition();

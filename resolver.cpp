@@ -400,8 +400,8 @@ void Resolver::Freestand(Player* player, AimPlayer* data, LagRecord* record)
 	return;
 }
 
-bool Resolver::Spin_Detection(AimPlayer* data) {
-
+bool Resolver::Spin_Detection(AimPlayer* data)
+{
 	if (data->m_records.empty())
 		return false;
 

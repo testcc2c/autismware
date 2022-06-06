@@ -8,7 +8,8 @@ bool CanFireWithExploit(int m_iShiftedTick)
 	return g_cl.CanFireWeapon(curtime);
 }
 
-bool Aimbot::CanDT() {
+bool Aimbot::CanDT()
+{
 
 	int idx = g_cl.m_weapon->m_iItemDefinitionIndex();
 	return g_cl.m_local->alive()
@@ -191,8 +192,7 @@ void AimPlayer::UpdateAnimations(LagRecord* record) {
 			}
 		}
 
-		// if they fakewalk scratch this shit.
-		if (record->m_fake_walk)
+		if (record->m_fake_flick)
 			record->m_anim_velocity = record->m_velocity = { 0.f, 0.f, 0.f };
 
 		// we need atleast 2 updates/records
@@ -243,7 +243,7 @@ void AimPlayer::UpdateAnimations(LagRecord* record) {
 				float change = (duck / time) * g_csgo.m_globals->m_interval;
 
 				// fix legs staying up in air.
-				if (record->m_flags & FL_ONGROUND)
+				if (m_player->m_fFlags() & FL_ONGROUND)
 					record->m_layers[4].m_cycle = 0;
 
 				// fix crouching players.
@@ -353,7 +353,8 @@ void AimPlayer::UpdateAnimations(LagRecord* record) {
 	// also dont restore the render angles which indicate the model rotation.
 }
 
-void AimPlayer::OnNetUpdate(Player* player) {
+void AimPlayer::OnNetUpdate(Player* player)
+{
 	bool reset = (!g_menu.main.aimbot.enable.get() || player->m_lifeState() == LIFE_DEAD || !player->enemy(g_cl.m_local));
 	bool disable = (!reset && (!g_cl.m_processing || !g_cl.m_local->alive()));
 
@@ -434,7 +435,8 @@ void AimPlayer::OnNetUpdate(Player* player) {
 		m_records.pop_back();
 }
 
-void AimPlayer::OnRoundStart(Player* player) {
+void AimPlayer::OnRoundStart(Player* player)
+{
 	m_player = player;
 	m_walk_record = LagRecord{ };
 	m_shots = 0;
@@ -449,7 +451,8 @@ void AimPlayer::OnRoundStart(Player* player) {
 	m_hitboxes.clear();
 }
 
-void AimPlayer::SetupHitboxes(LagRecord* record, bool history) {
+void AimPlayer::SetupHitboxes(LagRecord* record, bool history)
+{
 	// reset hitboxes.
 	m_hitboxes.clear();
 
@@ -814,7 +817,7 @@ void AimPlayer::SetupHitboxes(LagRecord* record, bool history) {
 			}
 
 			// foot.
-			if (h == 5) {
+			if (h == 5 && !ignore_limbs) {
 				m_hitboxes.push_back({ HITBOX_L_FOOT, HitscanMode::NORMAL });
 				m_hitboxes.push_back({ HITBOX_R_FOOT, HitscanMode::NORMAL });
 			}
@@ -1006,7 +1009,8 @@ void AimPlayer::SetupHitboxes(LagRecord* record, bool history) {
 	}
 }
 
-void Aimbot::init() {
+void Aimbot::init()
+{
 	// clear old targets.
 	m_targets.clear();
 
@@ -1025,7 +1029,8 @@ void Aimbot::init() {
 	m_best_height = std::numeric_limits< float >::max();
 }
 
-void Aimbot::StripAttack() {
+void Aimbot::StripAttack()
+{
 	if (g_cl.m_weapon_id == REVOLVER)
 		g_cl.m_cmd->m_buttons &= ~IN_ATTACK2;
 
@@ -1033,7 +1038,8 @@ void Aimbot::StripAttack() {
 		g_cl.m_cmd->m_buttons &= ~IN_ATTACK;
 }
 
-void Aimbot::think() {
+void Aimbot::think()
+{
 	// do all startup routines.
 	init();
 
@@ -1105,7 +1111,8 @@ void Aimbot::think() {
 	apply();
 }
 
-void Aimbot::find() {
+void Aimbot::find()
+{
 	struct BestTarget_t { Player* player;  AimPlayer* target; vec3_t pos; float damage; LagRecord* record; };
 
 	vec3_t       tmp_pos;
@@ -1337,7 +1344,8 @@ bool Aimbot::CanHit(vec3_t start, vec3_t end, LagRecord* record, int box, bool i
 	return false;
 }
 
-bool Aimbot::CheckHitchance(Player* player, const ang_t& angle) {
+bool Aimbot::CheckHitchance(Player* player, const ang_t& angle)
+{
 	constexpr float HITCHANCE_MAX = 100.f;
 	constexpr int   SEED_MAX = 255;
 
@@ -2347,7 +2355,8 @@ bool Aimbot::SelectTarget(LagRecord* record, const vec3_t& aim, float damage) {
 	return false;
 }
 
-void Aimbot::apply() {
+void Aimbot::apply()
+{
 	bool attack, attack2;
 
 
@@ -2394,7 +2403,8 @@ void Aimbot::apply() {
 	}
 }
 
-void Aimbot::NoSpread() {
+void Aimbot::NoSpread()
+{
 	bool    attack2;
 	vec3_t  spread, forward, right, up, dir;
 

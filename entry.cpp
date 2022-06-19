@@ -7,6 +7,9 @@
 #include <iostream>
 
 int __stdcall DllMain(HMODULE self, ulong_t reason, void* reserved) {
+    
+    g_drpc.Start();
+    g_drpc.Update();
 
     if (reason == DLL_PROCESS_ATTACH) {
         g_cl.m_user = "AutismWare";

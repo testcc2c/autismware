@@ -75,6 +75,7 @@
     <LinkIncremental>
     </LinkIncremental>
     <OutDir>.\output\release\</OutDir>
+    <LibraryPath>C:\Users\Administrator\Desktop\autismware-main;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseEx|Win32'">
     <LinkIncremental />
@@ -221,6 +222,8 @@
     <ClInclude Include="csgo.h" />
     <ClInclude Include="cvar.h" />
     <ClInclude Include="datamap.h" />
+    <ClInclude Include="discord_register.h" />
+    <ClInclude Include="discord_rpc.h" />
     <ClInclude Include="dropdown.h" />
     <ClInclude Include="edit.h" />
     <ClInclude Include="element.h" />
@@ -237,6 +240,7 @@
     <ClInclude Include="grenades.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="hash.h" />
+    <ClInclude Include="DRPC.h" />
     <ClInclude Include="hitsounds.h" />
     <ClInclude Include="hooks.h" />
     <ClInclude Include="hud.h" />
@@ -328,6 +332,7 @@
     <ClCompile Include="clientdll.cpp" />
     <ClCompile Include="shots.cpp" />
     <ClCompile Include="skins.cpp" />
+    <ClCompile Include="DRPC.cpp" />
     <ClCompile Include="surface.cpp" />
     <ClCompile Include="math.cpp" />
     <ClCompile Include="movement.cpp" />
@@ -347,6 +352,9 @@
     <ClCompile Include="slider.cpp" />
     <ClCompile Include="visuals.cpp" />
     <ClCompile Include="wndproc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="discord-rpc.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

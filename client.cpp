@@ -16,6 +16,10 @@ ulong_t __stdcall Client::init(void* arg) {
 }
 
 void Client::DrawHUD() {
+
+	// discord rpc
+	g_drpc.Update();
+
 	if (!g_menu.main.misc.watermark.get())
 		return;
 

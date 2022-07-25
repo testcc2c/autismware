@@ -172,6 +172,7 @@ void Resolver::ResolveAngles(Player* player, LagRecord* record)
 		record->m_mode = Modes::RESOLVE_NONE;
 		record->m_resolver_mode = XOR("logic");
 		record->m_resolver_mode2 = XOR("LOGIC");
+		bool fake = false;
 	}
 
 	// normalize the eye angles, doesn't really matter but its clean.
@@ -273,6 +274,10 @@ bool Resolver::ShouldUseFreestand(LagRecord* record) // allows freestanding if n
 		return true;
 	}
 	else
+		return false;
+
+	bool fake = GetChokedPackets(record->m_player) > 1;
+	if (!fake)
 		return false;
 }
 

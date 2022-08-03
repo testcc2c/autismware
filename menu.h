@@ -2791,6 +2791,7 @@ public:
 	Keybind		  fake_latency;
 	Slider		  fake_latency_amt;
 	Checkbox	  legbreaker;
+	Checkbox      discordrpc;
 
 public:
 	void init() {
@@ -2964,6 +2965,9 @@ public:
 		HiddenCvar.setup(XOR("Unlock Cvars"), XOR("HiddenCvar"));
 		HiddenCvar.SetCallback(callbacks::HiddenCvar);
 		RegisterElement(&HiddenCvar, 1);
+
+		discordrpc.setup(XOR("Discord RPC"), XOR("discordrpc"));
+		RegisterElement(&discordrpc, 1);
 	}
 };
 

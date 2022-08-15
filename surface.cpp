@@ -21,9 +21,11 @@ void Hooks::LockCursor( ) {
 
 		// un-lock the cursor.
 		g_csgo.m_surface->UnlockCursor( );
-
-		// disable input.
-		g_csgo.m_input_system->EnableInput( false );
+		
+		if (!g_cl.m_processing) {
+			// disable input.
+			g_csgo.m_input_system->EnableInput(false);
+		}
 	}
 
 	else {
